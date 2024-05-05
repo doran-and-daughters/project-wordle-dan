@@ -55,7 +55,3 @@ export function checkGuess(guess, answer) {
 
   return result;
 }
-
-export function fillBlank() {
-  return Array(NUM_OF_CHARACTERS).fill(" ").join(""); // See use in Board (and Row).
-}

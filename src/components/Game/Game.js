@@ -1,40 +1,46 @@
 import React, { useState } from "react";
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
-import Banner from "../Banner";
-import Board from "../Board";
-import Entry from "../Entry";
 import { checkGuess } from "../../game-helpers";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
+import GameBoard from "../GameBoard";
+import GameInput from "../GameInput";
+import GameWonBanner from "../GameWonBanner";
+import GameOverBanner from "../GameOverBanner";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer }); // @TODO REMOVE
 
 function Game() {
-  const [guesses, setGuesses] = useState([]);
-
-  const gameOver = guesses.length === NUM_OF_GUESSES_ALLOWED;
-  const hasWon = guesses.some(
-    (guess) =>
-      checkGuess(guess, answer).filter(({ status }) => status === "correct")
-        .length === guess.length
-  );
+  const [guesses, cueGuesses] = useState([]);
+  let gameStatus;
+  if (
+    guesses.some((guess) =>
+      checkGuess(guess, answer).every(({ status }) => status === "correct")
+    )
+  ) {
+    gameStatus = "won";
+  } else if (guesses.length >= NUM_OF_GUESSES_ALLOWED) {
+    gameStatus = "over";
+  } else {
+    gameStatus = "still playing";
+  }
 
   return (
     <>
-      {(hasWon || gameOver) && (
-        <Banner
-          result={hasWon ? "won" : "lost"}
-          guesses={guesses}
-          answer={answer}
-        />
-      )}
+      {gameStatus === "won" ? (
+        <GameWonBanner guessCount={guesses.length} />
+      ) : gameStatus === "over" ? (
+        <GameOverBanner answer={answer} />
+      ) : undefined}
 
-      <Board guesses={guesses} answer={answer} />
+      <GameBoard guesses={guesses} answer={answer} />
 
-      <Entry guesses={guesses} setGuesses={setGuesses} gameOver={gameOver} />
+      <GameInput
+        guesses={guesses}
+        cueGuesses={cueGuesses}
+        gameOver={["won", "over"].includes(gameStatus)}
+      />
     </>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { NUM_OF_CHARACTERS } from "../../constants";
 
-function Entry({ guesses, setGuesses, gameOver }) {
-  const [guess, setGuess] = useState("");
+function Entry({ guesses, cueGuesses, gameOver }) {
+  const [guess, cueGuess] = useState("");
 
   return (
     <form
@@ -10,15 +10,15 @@ function Entry({ guesses, setGuesses, gameOver }) {
       onSubmit={(e) => {
         e.preventDefault();
 
-        setGuesses([...guesses, guess]);
+        cueGuesses([...guesses, guess]);
 
-        setGuess("");
+        cueGuess("");
       }}
     >
       <label htmlFor="guess-input">Enter guess:</label>
       <input
         value={guess}
-        onChange={(e) => setGuess(e.target.value)}
+        onChange={(e) => cueGuess(e.target.value)}
         id="guess-input"
         minLength={NUM_OF_CHARACTERS}
         maxLength={NUM_OF_CHARACTERS}
