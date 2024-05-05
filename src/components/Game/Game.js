@@ -4,6 +4,8 @@ import { WORDS } from "../../data";
 import Banner from "../Banner";
 import Board from "../Board";
 import Entry from "../Entry";
+import { checkGuess } from "../../game-helpers";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -12,17 +14,27 @@ console.info({ answer }); // @TODO REMOVE
 
 function Game() {
   const [guesses, setGuesses] = useState([]);
-  const [result, setResult] = useState("still playing");
+
+  const gameOver = guesses.length === NUM_OF_GUESSES_ALLOWED;
+  const hasWon = guesses.some(
+    (guess) =>
+      checkGuess(guess, answer).filter(({ status }) => status === "correct")
+        .length === guess.length
+  );
 
   return (
     <>
-      {result !== "still playing" && (
-        <Banner result={result} guesses={guesses} />
+      {(hasWon || gameOver) && (
+        <Banner
+          result={hasWon ? "won" : "lost"}
+          guesses={guesses}
+          answer={answer}
+        />
       )}
 
-      <Board guesses={guesses} setResult={setResult} answer={answer} />
+      <Board guesses={guesses} answer={answer} />
 
-      <Entry result={result} guesses={guesses} setGuesses={setGuesses} />
+      <Entry guesses={guesses} setGuesses={setGuesses} gameOver={gameOver} />
     </>
   );
 }

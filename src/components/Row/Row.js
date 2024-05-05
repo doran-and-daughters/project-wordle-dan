@@ -1,26 +1,16 @@
 import React from "react";
-import { checkGuess } from "../../game-helpers";
+import { checkGuess, fillBlank } from "../../game-helpers";
 import Cell from "../Cell";
+import { key } from "../../utils";
 
-function Row({ guess, setResult, answer }) {
-  if (
-    checkGuess(guess, answer).filter(({ status }) => status === "correct")
-      .length === guess.length
-  ) {
-    setResult("won");
-  }
-
-  const isPlaceholderRow = guess === "     ";
+function Row({ guess, answer }) {
+  const isPlaceholderRow = guess === fillBlank();
 
   return (
     <p className="guess">
       {(isPlaceholderRow ? Array.from(guess) : checkGuess(guess, answer)).map(
         (char) => (
-          <Cell
-            key={window.crypto.randomUUID()}
-            char={char}
-            isPlaceholderRow={isPlaceholderRow}
-          />
+          <Cell key={key()} char={char} isPlaceholderRow={isPlaceholderRow} />
         )
       )}
     </p>

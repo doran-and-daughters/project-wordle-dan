@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { NUM_OF_CHARACTERS } from "../../constants";
 
-function Entry({ result, guesses, setGuesses }) {
+function Entry({ guesses, setGuesses, gameOver }) {
   const [guess, setGuess] = useState("");
 
   return (
@@ -19,11 +20,11 @@ function Entry({ result, guesses, setGuesses }) {
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         id="guess-input"
-        minLength={5}
-        maxLength={5}
+        minLength={NUM_OF_CHARACTERS}
+        maxLength={NUM_OF_CHARACTERS}
         type="text"
         required={true}
-        disabled={result !== "still playing"}
+        disabled={gameOver}
       />
     </form>
   );

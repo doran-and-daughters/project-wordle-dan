@@ -1,6 +1,6 @@
 import React from "react";
 
-function Banner({ result, guesses }) {
+function Banner({ guesses, answer, result }) {
   const hasWon = result === "won";
 
   return (
@@ -12,7 +12,7 @@ function Banner({ result, guesses }) {
         </p>
       ) : (
         <p>
-          Sorry, the correct answer is <strong>{ANSWER}</strong>.
+          Sorry, the correct answer is <strong>{answer}</strong>.
         </p>
       )}
     </div>
